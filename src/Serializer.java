@@ -224,5 +224,40 @@ public class Serializer {
 		doc.getRootElement().addContent(object);
 	}
 
+	// Seralize Simple Objects
+	private void serializeSimple(Object obj) {
+		Element object = elementCreation(obj);
+		Field[] aField = obj.getClass().getDeclaredFields();
+		
 
+		for(int i = 0; i < aField.length; i++){
+			
+			Element field = fieldCreation(aField, i);
+			try {
+				elementValue(obj, aField, i, field);
+				
+			} catch (IllegalArgumentException | IllegalAccessException e) {
+			
+				System.out.println("Error has occured");
+			} 
+			object.addContent(field);
+		}
+		doc.getRootElement().addContent(object);
+	}
+
+
+	private Element fieldCreation(Field[] aField, int i) {
+		Element field = new Element("Field");
+		field.setAttribute(new Attribute("name", aField[i].getName()));
+		field.setAttribute("declaringclass",aField[i].getDeclaringClass().getSimpleName());
+		return field;
+	}
+
+	private void elementValue(Object obj, Field[] aField, int i, Element field)
+			throws IllegalAccessException {
+			Element value = new Element("value");
+			Object objValue = aField[i].get(obj);
+			value.addContent(objValue.toString());
+			field.addContent(value);
+	}
 }
