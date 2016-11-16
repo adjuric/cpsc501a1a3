@@ -113,10 +113,8 @@ public class SocketServerMonitor {
     }
 
     /**
-     * Waits on client messages. Attempts to read client messages as a XML
-     * document and sends a receipt notice to the client when a message is
-     * received. Attempts to read the Command tag from the client and queues up
-     * the client command for execution
+     * Listens for a response
+     * 
      */
     private void listenToClient() {
         assert _clientSocket != null : "Invalid Client Socket!";
@@ -134,7 +132,7 @@ public class SocketServerMonitor {
             DOMBuilder builder = new DOMBuilder();
             org.jdom2.Document myDoc = builder.build(xmlDoc);
             try {
-                FileWriter writer = new FileWriter("src//serialization//output.xml");
+                FileWriter writer = new FileWriter("output.xml");
                 XMLOutputter xmlOutput = new XMLOutputter();
                 xmlOutput.output(myDoc, writer);
             } catch (IOException ex) {
@@ -153,8 +151,8 @@ public class SocketServerMonitor {
         // Make sure command line arguments are valid
   
         try {
-            InetSocketAddress test = new InetSocketAddress(12345);
-            getSingleSocketServerMonitor().start(new InetSocketAddress("192.168.1.150", 12345));
+            InetSocketAddress test = new InetSocketAddress(9090);
+            getSingleSocketServerMonitor().start(new InetSocketAddress("192.168.0.150", 9090));
             getSingleSocketServerMonitor().listenToClient();
         } catch (NumberFormatException ex) {
             System.out.println(ex);

@@ -43,7 +43,7 @@ public class ObjectCreator {
 			case("9"):
 				done = true;
 				ClientEmulator aClient = new ClientEmulator();
-				aClient.transfer("192.168.1.41", "12345", "src//serialization//sero.xml");
+				aClient.transfer("192.168.0.150", "9090", "sero.xml");
 				break;
 			default:
 				System.out.println("invalid userChoice");
@@ -56,7 +56,7 @@ public class ObjectCreator {
 		int userChoice;
 		Scanner in = new Scanner(System.in);
 		System.out.println("Select a Integer: ");
-		System.out.print("Chocie: ");
+		System.out.print("Choice: ");
 		userChoice = in.nextInt();
 		SimpleObject anObject = new SimpleObject(userChoice);
 		demo.serialize(anObject);	
