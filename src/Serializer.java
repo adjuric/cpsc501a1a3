@@ -81,5 +81,61 @@ public class Serializer {
 		doc.getRootElement().addContent(object);
 	}
 
+	private Element elementCreation(Object obj) {
+		Element object = new Element ("Object");
+		int hash = obj.hashCode();
+		String sHash = hash + "";
+		object.setAttribute(new Attribute("class",obj.getClass().getSimpleName()));
+		object.setAttribute(new Attribute("ID", sHash));
+		return object;
+	}
+
+	// Searlize arrays with reference objects
+	private void serializeArrayRef(Object obj) {
+		Element object = elementCreation(obj);
+		Element arrayObj = null;
+		Field[] aField = obj.getClass().getDeclaredFields();
+		
+		// Obtaining all fields and checking for arrays
+		for(int i = 0; i < aField.length; i++){
+			if(aField[i].getType().isArray() == false){
+				Element field = fieldCreation(aField, i);
+				try {
+					elementValue(obj, aField, i, field);
+					
+				} catch (IllegalArgumentException | IllegalAccessException e) {
+				
+					System.out.println("Error has occured");
+				} 
+				object.addContent(field);
+			} else{
+				arrayObj = new Element("Object");
+				arrayObj.setAttribute("class", aField[i].getDeclaringClass().getSimpleName());
+				arrayObj.setAttribute("id", String.valueOf(aField[i].hashCode()));
+				Object objValue = null;
+
+				try {
+					objValue = aField[i].get(obj);
+				} catch (IllegalArgumentException e) {
+					
+					e.printStackTrace();
+				} catch (IllegalAccessException e) {
+					
+					e.printStackTrace();
+				}
+				String length = String.valueOf(Array.getLength((objValue)));
+				arrayObj.setAttribute("length",length );
+				int iLength = Integer.parseInt(length);
+				for(int a = 0; a < iLength; a++ ){
+					Element reference = new Element("reference");
+					reference.addContent(String.valueOf(aField[i].hashCode()));
+					arrayObj.addContent(reference);
+				}
+			}
+		}
+		doc.getRootElement().addContent(arrayObj);	
+		doc.getRootElement().addContent(object);
+	}
+
 
 }
