@@ -3,9 +3,8 @@ import java.io.*;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.util.*;
-
-import org.jdom.*;
-import org.jdom.output.XMLOutputter;
+import org.jdom2.*;
+import org.jdom2.output.XMLOutputter;
 
 /*  
  * This class will serialize each object passed to it based on the formatting procedures outlined on the 
@@ -20,7 +19,7 @@ public class Serializer {
 	static Element serialized = new Element("serialized");
 	static Document doc = new Document(serialized);
 	
-	public org.jdom.Document serialize(Object obj)  {
+	public org.jdom2.Document serialize(Object obj)  {
 		
 			doc.setRootElement(serialized);
 			
@@ -39,14 +38,12 @@ public class Serializer {
 			}
 			else if(obj.getClass().toString().equals("class serialization.CollectionObject")){
 				serializeObjCol(obj);
-				
 			}
-			createXML();
-			
+			createXML();		
 		return doc;
 	}
 	// Obtain the doc file
-	public org.jdom.Document getDoc(){
+	public org.jdom2.Document getDoc(){
 		return doc;
 	}
 
@@ -90,19 +87,18 @@ public class Serializer {
 		return object;
 	}
 
-	// Searlize arrays with reference objects
+	// Serialize arrays with reference objects
+	// Obtain all fields and check for arrays
 	private void serializeArrayRef(Object obj) {
 		Element object = elementCreation(obj);
 		Element arrayObj = null;
 		Field[] aField = obj.getClass().getDeclaredFields();
 		
-		// Obtaining all fields and checking for arrays
 		for(int i = 0; i < aField.length; i++){
 			if(aField[i].getType().isArray() == false){
 				Element field = fieldCreation(aField, i);
 				try {
-					elementValue(obj, aField, i, field);
-					
+					elementValue(obj, aField, i, field);	
 				} catch (IllegalArgumentException | IllegalAccessException e) {
 				
 					System.out.println("Error has occured");
@@ -138,6 +134,8 @@ public class Serializer {
 	}
 
 	// Serialize Array with Primitives
+	// Obtain all elements and check if array
+	// Otherwise treat as a regular primitive
 	private void serializeObjPrim(Object obj) {
 		
 		Element object = elementCreation(obj);
@@ -145,7 +143,6 @@ public class Serializer {
 		Field[] aField = obj.getClass().getDeclaredFields();
 		Element field = null;
 
-		// Obtain all elements and check if array
 		for(int i = 0; i < aField.length; i++){
 			if(aField[i].getType().isArray() == false){
 				field = new Element("Field");
@@ -189,13 +186,14 @@ public class Serializer {
 	}
 
 	// Serialize objects with References 
+	// Check if Primitives and format normally
+	// Otherwise treat as a reference
 	private void serializeObjRef(Object obj) {
 		Element object = elementCreation(obj);
 		Field[] aField = obj.getClass().getDeclaredFields();
 		Element field = new Element("Field");
 		Element afield = new Element("Field");
 		
-		//Primitives formated normally otherwise as a reference
 		for(int i = 0; i < aField.length; i++){
 			if(aField[i].getType().isPrimitive()){
 				field = new Element("Field");
@@ -224,12 +222,11 @@ public class Serializer {
 		doc.getRootElement().addContent(object);
 	}
 
-	// Seralize Simple Objects
+	// Serialize Simple Objects
 	private void serializeSimple(Object obj) {
 		Element object = elementCreation(obj);
 		Field[] aField = obj.getClass().getDeclaredFields();
 		
-
 		for(int i = 0; i < aField.length; i++){
 			
 			Element field = fieldCreation(aField, i);

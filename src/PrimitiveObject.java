@@ -8,6 +8,7 @@ public class PrimitiveObject implements Serializable {
 	public PrimitiveObject(){
 	}
 	
+	//Create a 3 Digit Primitive Object (Array)
 	public PrimitiveObject(int digit1, int digit2, int digit3){
 		
 		this.digit1 = digit1;

@@ -9,6 +9,7 @@ public class CollectionObject implements Serializable {
 	public CollectionObject(){
 	}
 	
+	//Create a "Collections" Object using 3 Digits
 	public CollectionObject(int digit1, int digit2, int digit3){
 		
 		this.digit1 = digit1;

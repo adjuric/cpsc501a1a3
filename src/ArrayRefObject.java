@@ -8,6 +8,7 @@ public class ArrayRefObject implements Serializable {
 	public ArrayRefObject(){	
 	}
 	
+	//Create a 3 digit object that references the SimpleObject
 	ArrayRefObject(int digit1, int digit2, int digit3){
 		
 		this.digit1 = digit1;
@@ -24,8 +25,6 @@ public class ArrayRefObject implements Serializable {
 	}
 	
 	public String toString(){
-		return "First Referenced Digit: " + digitReferences[0] + " Second Referenced Digit: " + digitReferences[1] + " Third Referenced Digit: " + digitReferences[2];
-		
+		return "First Referenced Digit: " + digitReferences[0] + " Second Referenced Digit: " + digitReferences[1] + " Third Referenced Digit: " + digitReferences[2];	
 	}
-
 }

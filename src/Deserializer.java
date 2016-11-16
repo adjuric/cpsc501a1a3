@@ -24,7 +24,8 @@ public class Deserializer implements Serializable {
 			e.printStackTrace();
 		}
     	
-    	// get Roots, then parse and view objects 
+    	// Obtaining Roots
+    	// Parse, then View Objects
         Element root = document.getRootElement();
         List<Element> children = root.getChildren();
         List<Object> desObjects = new ArrayList<>();

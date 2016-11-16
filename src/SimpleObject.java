@@ -7,6 +7,7 @@ public class SimpleObject implements Serializable  {
 	public SimpleObject(){	
 	}
 	
+	//Increment the given Number
 	public SimpleObject(int num){
 		this.num = num + 1;	
 	}

@@ -8,6 +8,8 @@ public class ObjectReference implements Serializable {
 	public ObjectReference(){
 	}
 	
+	//Create a 1 Digit Object
+	//Which references another object (SimpleObject) in our case
 	public ObjectReference(int num){
 		
 		this.num = num *2;
