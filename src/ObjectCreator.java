@@ -8,7 +8,7 @@ public class ObjectCreator {
 	}
 
 	static Serializer demo = new Serializer();
-	
+	//User Interface
 	public static void Interface(){
 		Scanner in = new Scanner(System.in);
 		String userChoice;
