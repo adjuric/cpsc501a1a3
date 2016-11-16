@@ -188,4 +188,41 @@ public class Serializer {
 		doc.getRootElement().addContent(arrayObj);
 	}
 
+	// Serialize objects with References 
+	private void serializeObjRef(Object obj) {
+		Element object = elementCreation(obj);
+		Field[] aField = obj.getClass().getDeclaredFields();
+		Element field = new Element("Field");
+		Element afield = new Element("Field");
+		
+		//Primitives formated normally otherwise as a reference
+		for(int i = 0; i < aField.length; i++){
+			if(aField[i].getType().isPrimitive()){
+				field = new Element("Field");
+				field.setAttribute(new Attribute("name", aField[i].getName()));
+				field.setAttribute("declaringclass",aField[i].getDeclaringClass().getSimpleName());
+				try {
+					elementValue(obj, aField, i, field);
+					
+				} catch (IllegalArgumentException | IllegalAccessException e) {
+				
+					System.out.println("Error has occured");
+				} 
+				object.addContent(field);
+			}
+			else{
+				afield = new Element("Field");
+				afield.setAttribute(new Attribute("name", aField[i].getName()));
+				afield.setAttribute("declaringclass",aField[i].getDeclaringClass().getSimpleName());
+				Element reference = new Element("reference");
+				reference.addContent(String.valueOf(aField[i].hashCode()));
+				afield.addContent(reference);	
+			}
+		}
+
+		doc.getRootElement().addContent(afield);
+		doc.getRootElement().addContent(object);
+	}
+
+
 }
