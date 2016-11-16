@@ -137,5 +137,55 @@ public class Serializer {
 		doc.getRootElement().addContent(object);
 	}
 
+	// Serialize Array with Primitives
+	private void serializeObjPrim(Object obj) {
+		
+		Element object = elementCreation(obj);
+		Element arrayObj = null;
+		Field[] aField = obj.getClass().getDeclaredFields();
+		Element field = null;
+
+		// Obtain all elements and check if array
+		for(int i = 0; i < aField.length; i++){
+			if(aField[i].getType().isArray() == false){
+				field = new Element("Field");
+				field.setAttribute(new Attribute("name", aField[i].getName()));
+				field.setAttribute("declaringclass",aField[i].getDeclaringClass().getSimpleName());
+				try {
+					elementValue(obj, aField, i, field);
+					
+				} catch (IllegalArgumentException | IllegalAccessException e) {
+				
+					System.out.println("Error has occured");
+				} 
+				object.addContent(field);
+			}else{
+				arrayObj = new Element("Object");
+				arrayObj.setAttribute("class", aField[i].getDeclaringClass().getSimpleName());
+				arrayObj.setAttribute("id", String.valueOf(aField[i].hashCode()));
+				Object objValue = null;
+				try {
+					objValue = aField[i].get(obj);
+				} catch (IllegalArgumentException e) {
+					
+					e.printStackTrace();
+				} catch (IllegalAccessException e) {
+					
+					e.printStackTrace();
+				}
+				String length = String.valueOf(Array.getLength((objValue)));
+				arrayObj.setAttribute("length",length );
+				int iLength = Integer.parseInt(length);
+				for(int a = 0; a < iLength; a++ ){
+					Object arrayElement = Array.get(objValue, a);
+					Element aValue = new Element("value");
+					aValue.addContent(arrayElement.toString());
+					arrayObj.addContent(aValue);
+				}
+			}
+		}
+		doc.getRootElement().addContent(object);
+		doc.getRootElement().addContent(arrayObj);
+	}
 
 }
